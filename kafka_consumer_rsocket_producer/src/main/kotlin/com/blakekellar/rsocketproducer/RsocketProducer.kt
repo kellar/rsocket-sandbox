@@ -1,11 +1,11 @@
-package com.blakekellar.rsocketjava11sandbox
+package com.blakekellar.rsocketproducer
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 
 @SpringBootApplication
-class RsocketJava11SandboxApplication
+class RsocketProducer
 
 fun main(args: Array<String>) {
-	runApplication<RsocketJava11SandboxApplication>(*args)
+	runApplication<RsocketProducer>(*args)
 }
