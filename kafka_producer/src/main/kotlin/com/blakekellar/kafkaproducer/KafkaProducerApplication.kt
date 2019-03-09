@@ -18,14 +18,14 @@ import org.springframework.stereotype.Component
 import java.time.Instant
 
 @SpringBootApplication
-class KafkaProducer
+@EnableScheduling
+class KafkaProducerApplication
 
 fun main(args: Array<String>) {
-    runApplication<KafkaProducer>(*args)
+    runApplication<KafkaProducerApplication>(*args)
 }
 
 @Configuration
-@EnableScheduling
 class AppBeans {
 
     private val logger = KotlinLogging.logger {}
