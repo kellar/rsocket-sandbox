@@ -62,11 +62,13 @@ class ScheduledKafkaProducerService(
 ) {
 
     private val logger = KotlinLogging.logger {}
+    private var count: Long = 0L
 
     @Scheduled(fixedRate = 10000L)
     fun schedluledProduce() {
         logger.info("Writing a message to kafka")
-        kafkaTemplate.send(ScheduledKafkaProducerService.TOPIC, Instant.now().toString())
+        kafkaTemplate.send(ScheduledKafkaProducerService.TOPIC, count.toString(), Instant.now().toString())
+        count += 1
         logger.info("Wrote a message to kafka")
     }
 

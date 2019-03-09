@@ -1,3 +1,3 @@
 include 'kafka_producer'
-include 'kafka_consumer_rsocket_producer'
-include 'rsocket_consumer'
+include 'rsocket_server'
+include 'kafka_consumer_rsocket_client'

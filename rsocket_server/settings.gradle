@@ -3,4 +3,4 @@ pluginManagement {
 		gradlePluginPortal()
 	}
 }
-rootProject.name = 'kafka_consumer_rsocket_producer'
+rootProject.name = 'rsocket_server'
