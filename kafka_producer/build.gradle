@@ -8,6 +8,7 @@ apply plugin: 'io.spring.dependency-management'
 
 group = 'com.blakekellar'
 version = '0.0.1-SNAPSHOT'
+// TODO: 11
 sourceCompatibility = '1.8'
 
 repositories {
@@ -16,7 +17,7 @@ repositories {
 
 dependencies {
 
-	compile group: 'org.apache.logging.log4j', name: 'log4j-slf4j-impl', version: '2.11.2'
+        compile 'io.github.microutils:kotlin-logging:1.6.24'
 
 	implementation 'org.springframework.boot:spring-boot-starter-webflux'
 	implementation 'com.fasterxml.jackson.module:jackson-module-kotlin'
@@ -26,7 +27,7 @@ dependencies {
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'io.projectreactor:reactor-test'
 
-	//embedded broker
+	// embedded broker
 	implementation 'org.springframework.kafka:spring-kafka-test'
 }
 

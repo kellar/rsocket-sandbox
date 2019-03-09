@@ -3,4 +3,4 @@ pluginManagement {
 		gradlePluginPortal()
 	}
 }
-rootProject.name = 'rsocket-java11-sandbox'
+rootProject.name = 'kafka_producer'
