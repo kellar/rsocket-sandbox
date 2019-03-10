@@ -16,8 +16,13 @@ import org.springframework.boot.runApplication
 import org.springframework.stereotype.Component
 
 @SpringBootApplication
-class RsocketServerApplication : CommandLineRunner {
-    override fun run(vararg args: String?) { }
+class RsocketServerApplication
+
+@Component
+class CommandLineRunner : CommandLineRunner {
+    override fun run(vararg args: String?) {
+
+    }
 }
 
 fun main(args: Array<String>) {
