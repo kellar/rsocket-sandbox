@@ -18,6 +18,7 @@ import org.springframework.kafka.annotation.KafkaListener
 import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory
 import org.springframework.kafka.core.ConsumerFactory
 import org.springframework.kafka.core.DefaultKafkaConsumerFactory
+import org.springframework.kafka.support.KafkaHeaders
 import org.springframework.messaging.handler.annotation.Headers
 import org.springframework.stereotype.Component
 
@@ -58,9 +59,10 @@ class KafkaConsumer(
     private val logger = KotlinLogging.logger {}
 
     @KafkaListener(topics = ["topic"], groupId = "group")
-    fun receive(@org.springframework.messaging.handler.annotation.Payload payload: String, @Headers headers: Map<String, Any>) {
-        logger.info("Received message $payload with headers $headers")
-        rsocketClient.produce(payload, headers["key"] as String?)
+    fun receive(@org.springframework.messaging.handler.annotation.Payload payload: String,
+                @Headers headers: Map<String, Any>) {
+        logger.info("Received kafka message $payload with headers $headers")
+        rsocketClient.exchange(payload, headers[KafkaHeaders.RECEIVED_MESSAGE_KEY] as String?)
     }
 }
 
@@ -74,35 +76,35 @@ class RsocketClient {
             .start()
             .blockingGet()
 
-    fun produce(payloadText: String, keyText: String?) {
+    fun exchange(payloadText: String, keyText: String?) {
         val payload = DefaultPayload.text(payloadText, keyText)
 
         logger.info(">> FF")
         rSocket.fireAndForget(payload)
-        logger.info("<< FF data=" + payload.dataUtf8 + " key=" + keyText)
+        logger.info("<< FF metadata=${payload.metadataUtf8} data=${payload.dataUtf8}")
 
         logger.info(">> RR")
         val response = rSocket.requestResponse(payload)
         response.subscribe { it ->
-            logger.info("<< RR data=" + it.dataUtf8)
+            logger.info("<< RR metadata=${it.metadataUtf8} data=${it.dataUtf8}")
         }
 
         logger.info(">> RS")
         val stream = rSocket.requestStream(payload)
         stream.subscribe { it ->
-            logger.info("<< RS data=" + it.dataUtf8)
+            logger.info("<< RS metadata=${it.metadataUtf8} data=${it.dataUtf8}")
         }
 
         logger.info(">> RC")
         val channel = rSocket.requestChannel(Flowable.just(payload))
         channel.subscribe { it ->
-            logger.info("<< RC data=" + it.dataUtf8)
+            logger.info("<< RC metadata=${it.metadataUtf8} data=${it.dataUtf8}")
         }
 
         logger.info(">> MP")
         val metadata = rSocket.metadataPush(payload)
         metadata.subscribe {
-            logger.info("<< MP")
+            logger.info("<< MP metadata=${payload.metadataUtf8} data=${payload.dataUtf8}")
         }
     }
 }

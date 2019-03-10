@@ -66,10 +66,10 @@ class ScheduledKafkaProducerService(
 
     @Scheduled(fixedRate = 10000L)
     fun schedluledProduce() {
-        logger.info("Writing a message to kafka")
-        kafkaTemplate.send(ScheduledKafkaProducerService.TOPIC, count.toString(), Instant.now().toString())
+        val now = Instant.now()
+        kafkaTemplate.send(ScheduledKafkaProducerService.TOPIC, count.toString(), now.toString())
+        logger.info("Wrote key=$count payload=$now to kafka")
         count += 1
-        logger.info("Wrote a message to kafka")
     }
 
     companion object {
