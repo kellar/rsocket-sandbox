@@ -1,4 +1,0 @@
-spring:
-  main:
-    web-environment: false
-    web-application-type: NONE

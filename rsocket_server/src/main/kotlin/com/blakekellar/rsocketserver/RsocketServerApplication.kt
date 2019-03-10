@@ -18,25 +18,18 @@ import org.springframework.stereotype.Component
 @SpringBootApplication
 class RsocketServerApplication
 
-@Component
-class CommandLineRunner : CommandLineRunner {
-    override fun run(vararg args: String?) {
-
-    }
-}
-
 fun main(args: Array<String>) {
     runApplication<RsocketServerApplication>(*args)
 }
 
 @Component
-class RsocketServer {
+class RsocketServer() {
 
     private val logger = KotlinLogging.logger {}
     private val server: io.reactivex.disposables.Disposable
     private val rSocketHandler: RSocketHandler
 
-    constructor() {
+    init {
         this.rSocketHandler = RSocketHandler()
         this.server = RSocketFactory
                 .receive()
