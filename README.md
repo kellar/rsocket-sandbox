@@ -1,4 +1,7 @@
 # rsocket-sandbox
+
+Kafka producer / embedded kafka broker -> kafka consumer / rsocket client -> rsocket server
+
 ```
 ./gradlew clean build
 java -jar kafka_producer/build/libs/kafka_producer-0.0.1-SNAPSHOT.jar --spring.config.location=kafka_producer/application.yml
