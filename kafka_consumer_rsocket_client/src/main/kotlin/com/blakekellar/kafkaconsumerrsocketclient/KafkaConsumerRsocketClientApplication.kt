@@ -79,29 +79,31 @@ class RsocketClient {
     fun exchange(payloadText: String, keyText: String?) {
         val payload = DefaultPayload.text(payloadText, keyText)
 
-        logger.info(">> FF")
-        rSocket.fireAndForget(payload)
-        logger.info("<< FF metadata=${payload.metadataUtf8} data=${payload.dataUtf8}")
+        logger.info(">> FF metadata=${payload.metadataUtf8} data=${payload.dataUtf8}")
+        val ffComplete = rSocket.fireAndForget(payload)
+        ffComplete.subscribe {
+            logger.info("<< FF")
+        }
 
-        logger.info(">> RR")
+        logger.info(">> RR metadata=${payload.metadataUtf8} data=${payload.dataUtf8}")
         val response = rSocket.requestResponse(payload)
         response.subscribe { it ->
             logger.info("<< RR metadata=${it.metadataUtf8} data=${it.dataUtf8}")
         }
 
-        logger.info(">> RS")
+        logger.info(">> RS metadata=${payload.metadataUtf8} data=${payload.dataUtf8}")
         val stream = rSocket.requestStream(payload)
         stream.subscribe { it ->
             logger.info("<< RS metadata=${it.metadataUtf8} data=${it.dataUtf8}")
         }
 
-        logger.info(">> RC")
+        logger.info(">> RC metadata=${payload.metadataUtf8} data=${payload.dataUtf8}")
         val channel = rSocket.requestChannel(Flowable.just(payload))
         channel.subscribe { it ->
             logger.info("<< RC metadata=${it.metadataUtf8} data=${it.dataUtf8}")
         }
 
-        logger.info(">> MP")
+        logger.info(">> MP metadata=${payload.metadataUtf8} data=${payload.dataUtf8}")
         val metadata = rSocket.metadataPush(payload)
         metadata.subscribe {
             logger.info("<< MP metadata=${payload.metadataUtf8} data=${payload.dataUtf8}")

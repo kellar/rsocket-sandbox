@@ -68,7 +68,7 @@ class ScheduledKafkaProducerService(
     fun schedluledProduce() {
         val now = Instant.now()
         kafkaTemplate.send(ScheduledKafkaProducerService.TOPIC, count.toString(), now.toString())
-        logger.info("Wrote key=$count payload=$now to kafka")
+        logger.info(">> key=$count payload=$now")
         count += 1
     }
 

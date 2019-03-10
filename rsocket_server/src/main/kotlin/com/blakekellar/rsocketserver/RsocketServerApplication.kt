@@ -48,30 +48,36 @@ class RsocketServer() {
         }
 
         override fun fireAndForget(payload: Payload): Completable {
-            logger.info("<< FF")
+            logger.info("<< FF metadata=${payload.metadataUtf8} data=${payload.dataUtf8}")
+            logger.info(">> FF")
             return Completable.complete()
         }
 
         override fun requestResponse(payload: Payload): Single<Payload> {
-            logger.info("<< RR")
+            logger.info("<< RR metadata=${payload.metadataUtf8} data=${payload.dataUtf8}")
+            logger.info(">> RR")
             return Single.just(payloadFactory(payload))
         }
 
         override fun requestStream(payload: Payload): Flowable<Payload> {
-            logger.info("<< RS")
-
-            return Flowable.just(payloadFactory(payload))
+            logger.info("<< RS metadata=${payload.metadataUtf8} data=${payload.dataUtf8}")
+            val reversedPayload = payloadFactory(payload)
+            logger.info(">> RS metadata=${reversedPayload.metadataUtf8} data=${reversedPayload.dataUtf8}")
+            return Flowable.just(reversedPayload)
         }
 
         override fun requestChannel(payloads: Publisher<Payload>): Flowable<Payload> {
-            logger.info("<< RC")
             return Flowable.fromPublisher(payloads).flatMap { payload ->
-                Flowable.just(payloadFactory(payload))
+                logger.info("<< RC metadata=${payload.metadataUtf8} data=${payload.dataUtf8}")
+                val reversedPayload = payloadFactory(payload)
+                logger.info(">> RC metadata=${reversedPayload.metadataUtf8} data=${reversedPayload.dataUtf8}")
+                Flowable.just(reversedPayload)
             }
         }
 
         override fun metadataPush(payload: Payload): Completable {
-            logger.info("<< MP")
+            logger.info("<< MP metadata=${payload.metadataUtf8} data=${payload.dataUtf8}")
+            logger.info(">> MP")
             return Completable.complete()
         }
     }
