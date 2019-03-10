@@ -17,9 +17,7 @@ import org.springframework.stereotype.Component
 
 @SpringBootApplication
 class RsocketServerApplication : CommandLineRunner {
-    override fun run(vararg args: String?) {
-        Thread.currentThread().join()
-    }
+    override fun run(vararg args: String?) { }
 }
 
 fun main(args: Array<String>) {
