@@ -10,7 +10,6 @@ import io.rsocket.kotlin.transport.netty.server.TcpServerTransport
 import io.rsocket.kotlin.util.AbstractRSocket
 import mu.KotlinLogging
 import org.reactivestreams.Publisher
-import org.springframework.boot.CommandLineRunner
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 import org.springframework.stereotype.Component
@@ -20,6 +19,7 @@ class RsocketServerApplication
 
 fun main(args: Array<String>) {
     runApplication<RsocketServerApplication>(*args)
+    Thread.currentThread().join()
 }
 
 @Component

@@ -30,6 +30,7 @@ class KafkaConsumerRSocketClientApplicationTests {
     }
 
     @Test
-    fun contextLoads() { }
+    fun contextLoads() {
+    }
 
 }
