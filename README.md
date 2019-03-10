@@ -14,7 +14,7 @@ Kafka Producer
 2019-03-09 21:53:59.195  INFO 4896 --- [   scheduling-1] c.b.k.ScheduledKafkaProducerService      : >> key=5 payload=2019-03-10T03:53:59.195204Z
 ```
 
-Kafka Client / RSocket Client
+Kafka Consumer / RSocket Client
 ```
 2019-03-09 21:53:59.201  INFO 5098 --- [ntainer#0-0-C-1] c.b.k.KafkaConsumer                      : Received kafka message 2019-03-10T03:53:59.195204Z with headers {kafka_offset=5, kafka_consumer=org.apache.kafka.clients.consumer.KafkaConsumer@14f412e4, kafka_timestampType=CREATE_TIME, kafka_receivedMessageKey=5, kafka_receivedPartitionId=0, kafka_receivedTopic=topic, kafka_receivedTimestamp=1552190039195}
 2019-03-09 21:53:59.201  INFO 5098 --- [ntainer#0-0-C-1] c.b.k.RsocketClient                      : >> FF metadata=5 data=2019-03-10T03:53:59.195204Z
