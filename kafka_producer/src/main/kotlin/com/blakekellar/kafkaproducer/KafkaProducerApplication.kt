@@ -2,6 +2,7 @@ package com.blakekellar.kafkaproducer
 
 import mu.KotlinLogging
 import org.apache.kafka.clients.producer.ProducerConfig
+import org.apache.kafka.common.serialization.LongSerializer
 import org.apache.kafka.common.serialization.StringSerializer
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.autoconfigure.SpringBootApplication
@@ -39,37 +40,35 @@ class AppBeans {
     fun producerConfig(broker: EmbeddedKafkaBroker): Map<String, Any> {
         val producerConfigs = mutableMapOf<String, Any>()
         producerConfigs[ProducerConfig.BOOTSTRAP_SERVERS_CONFIG] = broker.brokersAsString
-        producerConfigs[ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG] = StringSerializer::class.java
+        producerConfigs[ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG] = LongSerializer::class.java
         producerConfigs[ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG] = StringSerializer::class.java
         producerConfigs[ProducerConfig.CLIENT_ID_CONFIG] = ScheduledKafkaProducerService.PRODUCER_CLIENT_ID
         return producerConfigs
     }
 
     @Bean
-    fun producerFactory(producerConfig: Map<String, Any>): ProducerFactory<String, String> {
+    fun producerFactory(producerConfig: Map<String, Any>): ProducerFactory<Long, String> {
         return DefaultKafkaProducerFactory(producerConfig)
     }
 
     @Bean
-    fun kafkaTemplate(producerFactory: ProducerFactory<String, String>): KafkaTemplate<String, String> {
+    fun kafkaTemplate(producerFactory: ProducerFactory<Long, String>): KafkaTemplate<Long, String> {
         return KafkaTemplate(producerFactory)
     }
 }
 
 @Component
 class ScheduledKafkaProducerService(
-        @Autowired private val kafkaTemplate: KafkaTemplate<String, String>
+        @Autowired private val kafkaTemplate: KafkaTemplate<Long, String>
 ) {
 
     private val logger = KotlinLogging.logger {}
-    private var count: Long = 0L
 
     @Scheduled(fixedRate = 10000L)
     fun schedluledProduce() {
         val now = Instant.now()
-        kafkaTemplate.send(ScheduledKafkaProducerService.TOPIC, count.toString(), now.toString())
-        logger.info(">> key=$count payload=$now")
-        count += 1
+        kafkaTemplate.send(ScheduledKafkaProducerService.TOPIC, now.toEpochMilli(), now.toString())
+        logger.info(">> key=${now.toEpochMilli()} payload=${now.toString()}")
     }
 
     companion object {

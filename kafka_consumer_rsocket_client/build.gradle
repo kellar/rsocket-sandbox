@@ -23,7 +23,7 @@ dependencies {
 	compile 'io.rsocket.kotlin:rsocket-core:0.9.6'
 	compile 'io.rsocket.kotlin:rsocket-transport-netty:0.9.6'
 	compile 'io.rsocket.kotlin:rsocket-transport-okhttp:0.9.6'
-	
+
 	implementation 'org.springframework.boot:spring-boot-starter-webflux'
 	implementation 'com.fasterxml.jackson.module:jackson-module-kotlin'
 	implementation 'org.jetbrains.kotlin:kotlin-reflect'

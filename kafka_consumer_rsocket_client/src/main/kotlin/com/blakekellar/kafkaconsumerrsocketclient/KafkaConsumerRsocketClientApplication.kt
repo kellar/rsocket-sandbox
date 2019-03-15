@@ -7,6 +7,7 @@ import io.rsocket.kotlin.RSocketFactory
 import io.rsocket.kotlin.transport.netty.client.TcpClientTransport
 import mu.KotlinLogging
 import org.apache.kafka.clients.consumer.ConsumerConfig
+import org.apache.kafka.common.serialization.LongDeserializer
 import org.apache.kafka.common.serialization.StringDeserializer
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.autoconfigure.SpringBootApplication
@@ -42,21 +43,21 @@ class AppBeans {
     }
 
     @Bean
-    fun kafkaPublisher(): Flux<ReceiverRecord<String, String>> {
+    fun kafkaPublisher(): Flux<ReceiverRecord<Long, String>> {
         val properties = mutableMapOf<String, Any>()
         properties[ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG] = "localhost:9092"
         properties[ConsumerConfig.CLIENT_ID_CONFIG] = "clientid"
         properties[ConsumerConfig.GROUP_ID_CONFIG] = "group"
-        properties[ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG] = StringDeserializer::class.java // TODO: Int keys
+        properties[ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG] = LongDeserializer::class.java
         properties[ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG] = StringDeserializer::class.java
         properties[ConsumerConfig.AUTO_OFFSET_RESET_CONFIG] = "latest"
-        val receiverOptions = ReceiverOptions.create<String, String>(properties).subscription(Collections.singleton("topic"))
+        val receiverOptions = ReceiverOptions.create<Long, String>(properties).subscription(Collections.singleton("topic"))
         return KafkaReceiver.create(receiverOptions).receive()
     }
 
     @Bean
     fun disposableSubscriptionFromServer(@Autowired rSocket: RSocket,
-                                         @Autowired kafkaPublisher: Flux<ReceiverRecord<String, String>>): Disposable {
+                                         @Autowired kafkaPublisher: Flux<ReceiverRecord<Long, String>>): Disposable {
         return rSocket.requestChannel(
                 kafkaPublisher
                         .map { it ->
